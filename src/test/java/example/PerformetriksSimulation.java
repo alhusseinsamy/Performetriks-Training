@@ -10,6 +10,15 @@ import static example.endpoints.ApiEndpoints.*;
 import static example.endpoints.WebsiteEndpoints.*;
 
 public class PerformetriksSimulation extends Simulation {
+  private record Product(
+      int id,
+      String name,
+      String color,
+      String price,
+      int quantity,
+      String imageSrc,
+      String imageAlt) {
+  }
 
   // Load VU count from system properties
   // Reference: https://docs.gatling.io/guides/passing-parameters/
