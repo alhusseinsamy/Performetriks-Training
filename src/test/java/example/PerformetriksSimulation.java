@@ -3,11 +3,19 @@ package example;
 import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.*;
 
+import java.util.ArrayList;
+
 import io.gatling.javaapi.core.*;
 import io.gatling.javaapi.http.*;
 
 import static example.endpoints.ApiEndpoints.*;
 import static example.endpoints.WebsiteEndpoints.*;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class PerformetriksSimulation extends Simulation {
   private record Product(
@@ -19,6 +27,8 @@ public class PerformetriksSimulation extends Simulation {
       String imageSrc,
       String imageAlt) {
   }
+
+  private static final ObjectMapper mapper = new ObjectMapper();
 
   // Load VU count from system properties
   // Reference: https://docs.gatling.io/guides/passing-parameters/
@@ -44,7 +54,27 @@ public class PerformetriksSimulation extends Simulation {
       loginPage,
       feed(usersFeeder),
       login,
-      products);
+      products,
+      exec(session -> {
+        try {
+          List<Product> products = mapper.readValue(
+              session.getString("Products"), new TypeReference<List<Product>>() {
+              });
+
+          Random rand = new Random();
+          Product randomProduct = products.get(rand.nextInt(products.size()));
+          List<Product> cartItems = new ArrayList<>();
+          cartItems.add(randomProduct);
+
+          // Serialize updated cart list back to session
+          String cartItemsJsonString = mapper.writeValueAsString(cartItems);
+          return session.set("CartItems", cartItemsJsonString);
+
+        } catch (Exception e) {
+          throw new RuntimeException(e);
+        }
+      }),
+      addToCart);
 
   // Define assertions
   // Reference: https://docs.gatling.io/reference/script/core/assertions/

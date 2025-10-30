@@ -26,4 +26,10 @@ public class ApiEndpoints {
       .check(status().is(200))
       .check(jmesPath("accessToken").saveAs("AccessToken"));
 
+  public static HttpRequestActionBuilder addToCart = http("cart")
+      .post("/cart")
+      .asJson()
+      .body(ElFileBody("bodies/cart.json"))
+      .check(status().is(200));
+
 }
