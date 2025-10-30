@@ -12,4 +12,11 @@ public class ApiEndpoints {
       .check(status().is(200))
       .check(jmesPath("sessionId").saveAs("SessionId"));
 
+  public static HttpRequestActionBuilder products = http("products")
+      .get("/products")
+      .queryParam("page", "#{pageNumber}")
+      .queryParam("search", "#{searchKey}")
+      .check(status().is(200))
+      .check(jmesPath("products").saveAs("Products"));
+
 }
