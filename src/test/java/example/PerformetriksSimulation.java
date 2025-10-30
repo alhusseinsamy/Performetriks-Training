@@ -6,6 +6,9 @@ import static io.gatling.javaapi.http.HttpDsl.*;
 import io.gatling.javaapi.core.*;
 import io.gatling.javaapi.http.*;
 
+import static example.endpoints.ApiEndpoints.*;
+import static example.endpoints.WebsiteEndpoints.*;
+
 public class PerformetriksSimulation extends Simulation {
 
   // Load VU count from system properties
@@ -21,7 +24,9 @@ public class PerformetriksSimulation extends Simulation {
 
   // Define scenario
   // Reference: https://docs.gatling.io/reference/script/core/scenario/
-  private static final ScenarioBuilder scenario = scenario("Scenario").exec(http("Session").get("/session"));
+  private static final ScenarioBuilder scenario = scenario("Scenario").exec(
+      homePage,
+      session);
 
   // Define assertions
   // Reference: https://docs.gatling.io/reference/script/core/assertions/
