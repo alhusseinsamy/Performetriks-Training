@@ -10,4 +10,8 @@ public class WebsiteEndpoints {
       .get("https://ecomm.gatling.io/")
       .check(status().in(200, 304));
 
+  public static HttpRequestActionBuilder loginPage = http("LoginPage")
+      .get("https://ecomm.gatling.io/login")
+      .check(status().in(200, 304));
+
 }

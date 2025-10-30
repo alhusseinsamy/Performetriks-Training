@@ -19,4 +19,11 @@ public class ApiEndpoints {
       .check(status().is(200))
       .check(jmesPath("products").saveAs("Products"));
 
+  public static HttpRequestActionBuilder login = http("login")
+      .post("/login")
+      .formParam("username", "#{username}")
+      .formParam("password", "#{password}")
+      .check(status().is(200))
+      .check(jmesPath("accessToken").saveAs("AccessToken"));
+
 }

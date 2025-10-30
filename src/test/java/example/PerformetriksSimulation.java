@@ -15,6 +15,8 @@ public class PerformetriksSimulation extends Simulation {
   // Reference: https://docs.gatling.io/guides/passing-parameters/
   private static final int vu = Integer.getInteger("vu", 1);
 
+  private static final FeederBuilder<String> usersFeeder = csv("data/users_dev.csv").circular();
+
   // Define HTTP configuration
   // Reference: https://docs.gatling.io/reference/script/protocols/http/protocol/
   private static final HttpProtocolBuilder httpProtocol = http.baseUrl("https://api-ecomm.gatling.io")
@@ -29,6 +31,10 @@ public class PerformetriksSimulation extends Simulation {
       session,
       exec(session -> session.set("pageNumber", "0")),
       exec(session -> session.set("searchKey", "")),
+      products,
+      loginPage,
+      feed(usersFeeder),
+      login,
       products);
 
   // Define assertions
